@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/Introduction_to_HUS_OMOP_ETL/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Introduction - HUS OMOP documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">HUS OMOP documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Introduction</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../riah_combined/" class="nav-link">Details by OMOP table</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../riah_index/" class="nav-link">RiaH original</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../riah_combined/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#overview" class="nav-link">Overview</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#technical-use-of-the-generic-intermediate-table" class="nav-link">(technical) Use of the Generic intermediate -table</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#about-sources-and-actual-target-tables" class="nav-link">About sources and actual target tables</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#notes-about-customer-data" class="nav-link">Notes about customer data</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#notes-about-visit-data" class="nav-link">Notes about visit data</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#notes-about-individual-medical-event-sources" class="nav-link">Notes about individual medical event sources</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#notes-about-derived-tables-observation_period-eras-cdm_source" class="nav-link">Notes about derived tables (observation_period, eras, cdm_source)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#tecnical-notes" class="nav-link">Tecnical notes</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#definitions-in-ddl-structures" class="nav-link">definitions in DDL structures</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#gathering-statistics" class="nav-link">Gathering statistics</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>Remove when ready: https://code.visualstudio.com/docs/languages/markdown
+side by side Ctrl+K V
+ switch between views, press Ctrl+Shift+V</p>
+<h1 id="overview">Overview</h1>
+<p>HUS OMOP uses data lake structures as sources. All ETL logic is implemented as stored procedures in the Synapse Analytics database. </p>
+<p>Sources are accessed via external tables (=a structure that looks like a table in the database but uses a data lake object as storage).</p>
+<p>The following table shows sources, rows (as of 2023-09-14) and mapping coverage for events and individual codes.</p>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Source</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apotti</td>
+<td>Apotti/Clarity l&#228;&#228;kitys</td>
+<td>28467716</td>
+<td>87.74</td>
+<td>1792</td>
+<td>91.24</td>
+</tr>
+<tr>
+<td>Apotti</td>
+<td>Apotti/Tilannekanta diagnoosi</td>
+<td>47141633</td>
+<td>99.73</td>
+<td>10092</td>
+<td>97.46</td>
+</tr>
+<tr>
+<td>Apotti</td>
+<td>Apotti/Tilannekanta toimenpide</td>
+<td>11973210</td>
+<td>79.01</td>
+<td>6331</td>
+<td>36.52</td>
+</tr>
+<tr>
+<td>Kemokur</td>
+<td>Kemokur oheisl&#228;&#228;ke</td>
+<td>456857</td>
+<td>91.68</td>
+<td>94</td>
+<td>42.55</td>
+</tr>
+<tr>
+<td>Kemokur</td>
+<td>Kemokur sy&#246;p&#228;l&#228;&#228;ke</td>
+<td>511715</td>
+<td>99.99</td>
+<td>168</td>
+<td>98.21</td>
+</tr>
+<tr>
+<td>Marela</td>
+<td>Marela l&#228;&#228;ke</td>
+<td>1128969</td>
+<td>99.17</td>
+<td>711</td>
+<td>83.12</td>
+</tr>
+<tr>
+<td>Multilab</td>
+<td>Multilab lis&#228;tieto</td>
+<td>45826069</td>
+<td>71.27</td>
+<td>575</td>
+<td>5.74</td>
+</tr>
+<tr>
+<td>Multilab</td>
+<td>Multilab mikrobitulos</td>
+<td>5637900</td>
+<td>99.97</td>
+<td>1106</td>
+<td>98.92</td>
+</tr>
+<tr>
+<td>Multilab</td>
+<td>Multilab tulos</td>
+<td>587937883</td>
+<td>96.37</td>
+<td>6412</td>
+<td>16.48</td>
+</tr>
+<tr>
+<td>Opera</td>
+<td>Opera toimenptoimenpideiteet</td>
+<td>5503658</td>
+<td>95.63</td>
+<td>5381</td>
+<td>37.39</td>
+</tr>
+<tr>
+<td>Uranus</td>
+<td>Uranus diagnoosi</td>
+<td>59964926</td>
+<td>99.73</td>
+<td>13321</td>
+<td>93.00</td>
+</tr>
+<tr>
+<td>Uranus</td>
+<td>Uranus hoitotaulukko</td>
+<td>99310280</td>
+<td>89.62</td>
+<td>527</td>
+<td>21.63</td>
+</tr>
+<tr>
+<td>Uranus</td>
+<td>Uranus l&#228;&#228;kitys</td>
+<td>33214562</td>
+<td>95.62</td>
+<td>3356</td>
+<td>88.32</td>
+</tr>
+<tr>
+<td>Uranus</td>
+<td>Uranus toimenpide</td>
+<td>24425487</td>
+<td>72.85</td>
+<td>6393</td>
+<td>35.12</td>
+</tr>
+</tbody>
+</table>
+<h2 id="technical-use-of-the-generic-intermediate-table">(technical) Use of the Generic intermediate -table</h2>
+<p>In the following pages, ETL has been documented with Rabbit in a Hat tool. It is worth noting that for event type data (excluding visits), only main source-target pairs have been described. Because in OMOP etl, the domain of the mapped standard concept dictates the target table, actual ETL code uses an intermediate table: All event type sources (diagnoses, procedures, medication etc) are first loaded into intermediate table. After all sources have been processed, contents of the intermediate table are loaded into the actual target tables as dictated by the domain of the standard concepts.</p>
+<p>The main benefit of this strategy is that less code is needed: Each source needs only one loading routine and one loading routine for each target. In traditional OMOP etl each source-target pair requires its own procedure. It is also required to know beforehand all the target domains that vocabulary mappings will use.</p>
+<p>With the use of intermediate table, target domains are irrelevant at coding time and if target concepts in the vocabulary mappings change to an other domain, this does not require changes in the ETL code.</p>
+<h2 id="about-sources-and-actual-target-tables">About sources and actual target tables</h2>
+<p>The following tables show where data from each source structure goes. Mapped_rows_pct describes the coverage of the mapping. Each source has a default target based on the nature of the source == diagnosis information is targeted to condition_occurrence if we can’t map the code to a standard concept. Unmapped rows (and codes) lower the mapping coverage percentage of the target that is the default of each source.</p>
+<p>If a standard concept is found, its domain dictates the target table. Because of this, the following table contains many rows here mapped_rows_pct is 100%. This is not a sign of exceptionally complete vocabulary mapping but just tells us that for example, all rows destined to condition occurrence from Apotti’s procedure source (Apotti/Tilannekanta toimenpide) were loaded as conditions.</p>
+<p>Because targets are dictated by the domains of the vocabulary mapping target concepts, targets can change over time without the actual ETL changing.</p>
+<h2 id="notes-about-customer-data">Notes about customer data</h2>
+<p>TODO</p>
+<h3 id="customer-history">Customer history</h3>
+<p>TODO</p>
+<h3 id="excluded-patients">Excluded patients</h3>
+<p>TODO</p>
+<h2 id="notes-about-visit-data">Notes about visit data</h2>
+<p>TODO hoitojaksot ja käynnit, Uranus ja Apotti, päällekkäisyydet</p>
+<h2 id="notes-about-individual-medical-event-sources">Notes about individual medical event sources</h2>
+<p>This section describes for each source 
+- nature of the source
+- default target
+- vocabulary mappings used
+- to what OMOP tables the rows go according to domains of the target concepts in the current (as of 2023-9-14) mappings</p>
+<h3 id="apotticlarity-laakitys">Apotti/Clarity lääkitys</h3>
+<p>Medication data from Apotti. Contains both prescriptions and drugs ordered(?) during the hospital stay.</p>
+<p>Default target: drug_exposure</p>
+<p>Vocabulary mapping: ATC and HUS-kemo-generic</p>
+<p><em>It is worth noting that OMOP’s ATC vocabulary comes a little bit behind compared to the ATC classification that is used. Because of this, some really new codes can be left unmapped by ATC. We use mapping by the  generic name (“HUS-kemo-generic”) as a failsafe in these situations.</em></p>
+<p>Some ATC codes that are used and that are not actual drugs, for example, hand lotions, are missing from the ATC vocabulary and mappings related to that.
+|Source|domain_as_table|n_rows|mapped_rows_pct|n_source_codes|mapped_codes_pct|
+|---|---|---|---|---|---|
+|Apotti/Clarity l&#228;&#228;kitys|drug_exposure|28467716|87.74|1792|91.24|</p>
+<h3 id="apottitilannekanta-diagnoosi">Apotti/Tilannekanta diagnoosi</h3>
+<p>Diagnosis data from Apotti. </p>
+<p>Default target: condition_occurrence</p>
+<p>Vocabulary mapping: ICD10 and ICD10fi</p>
+<p>The mapping is based on a combination of FinOMOP developed ICD10fi and international ICD10 vocabulary mappings. ICD10fi contains the national codes that are used only in Finland.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apotti/Tilannekanta diagnoosi</td>
+<td>condition_occurrence</td>
+<td>42781502</td>
+<td>99.70</td>
+<td>9229</td>
+<td>97.23</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta diagnoosi</td>
+<td>Measurement</td>
+<td>411739</td>
+<td>100.00</td>
+<td>80</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta diagnoosi</td>
+<td>observation</td>
+<td>3010882</td>
+<td>100.00</td>
+<td>655</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta diagnoosi</td>
+<td>other Observation:Meas Value</td>
+<td>26397</td>
+<td>100.00</td>
+<td>2</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta diagnoosi</td>
+<td>procedure_occurrence</td>
+<td>911113</td>
+<td>100.00</td>
+<td>126</td>
+<td>100.00</td>
+</tr>
+</tbody>
+</table>
+<h3 id="apottitilannekanta-toimenpide">Apotti/Tilannekanta toimenpide</h3>
+<p>Procedure data from Apotti. </p>
+<p>Default target:  <strong>procedure occurrence</strong></p>
+<p>Vocabulary mapping: <strong>NCSPfi</strong></p>
+<p>The NCSPfi mapping is developed by the FinOMOP community. </p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apotti/Tilannekanta toimenpide</td>
+<td>condition_occurrence</td>
+<td>4</td>
+<td>100.00</td>
+<td>1</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta toimenpide</td>
+<td>device_exposure</td>
+<td>15229</td>
+<td>100.00</td>
+<td>6</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta toimenpide</td>
+<td>Measurement</td>
+<td>37104</td>
+<td>100.00</td>
+<td>16</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta toimenpide</td>
+<td>observation</td>
+<td>1329042</td>
+<td>100.00</td>
+<td>36</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta toimenpide</td>
+<td>other Observation:Note</td>
+<td>60</td>
+<td>100.00</td>
+<td>1</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Apotti/Tilannekanta toimenpide</td>
+<td>procedure_occurrence</td>
+<td>10591771</td>
+<td>76.27</td>
+<td>6271</td>
+<td>35.91</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kemokur-oheislaake">Kemokur oheislääke</h3>
+<p>Additional drugs related to cancer drugs  from Kemokur system.</p>
+<p>Default target: <strong>Drug_exposure</strong></p>
+<p>Vocabulary mappings: <strong>HUS-kemo-generic</strong> (for drugs) <strong>MedsRoute</strong> (for drug route)</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kemokur oheisl&#228;&#228;ke</td>
+<td>drug_exposure</td>
+<td>456857</td>
+<td>91.68</td>
+<td>94</td>
+<td>42.55</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kemokur-syopalaake">Kemokur syöpälääke</h3>
+<p>Cancer drugs  from Kemokur system.</p>
+<p>Default target: <strong>Drug_exposure</strong></p>
+<p>Vocabulary mappings: <strong>HUS-kemo-generic</strong> (for drugs) <strong>MedsRoute</strong> (for drug route)</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kemokur sy&#246;p&#228;l&#228;&#228;ke</td>
+<td>drug_exposure</td>
+<td>511715</td>
+<td>99.99</td>
+<td>168</td>
+<td>98.21</td>
+</tr>
+</tbody>
+</table>
+<h3 id="marela-laake">Marela lääke</h3>
+<p>Drug information from Marela</p>
+<p>Default target: <strong>drug_exposure</strong></p>
+<p>Vocabulary mappings: <strong>ATC</strong> and <strong>HUS-kemo-generic</strong></p>
+<p>The events are primarily mapped to standard concepts using ATC, but when that fails, generic name mapping is used. There are two reasons for this:
+- Some drugs are too new to have their ATC codes in the OMOP vocabulary
+- Research drugs are mapped only using their generic name</p>
+<p><strong>TODO: Tarvitaan tarkempi kuvaus tutkimuslääkkeiden käsittelystä.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Marela l&#228;&#228;ke</td>
+<td>drug_exposure</td>
+<td>1128969</td>
+<td>99.17</td>
+<td>711</td>
+<td>83.12</td>
+</tr>
+</tbody>
+</table>
+<h3 id="multilab-lisatieto">Multilab lisätieto</h3>
+<p>Description Additional information related to multilab results (Multilab tulos being the main event).</p>
+<p>Default target: <strong>measurement</strong></p>
+<p>Vocabulary mappings: <strong>Lisatiedot</strong></p>
+<p>Information in this source include things like <em>Myelocytes/100 leukocytes in Blood</em> and <em>Leukocytes [#/volume] in Urine by Automated count.</em>. There are also things like  <em>Type of urine collection method</em>.</p>
+<p>Operator concept is deduced by the value starting with '&gt;', '&lt;', 'alle', 'ali' or 'yli'.</p>
+<p><em>Note: There are currently no vocabulary mappings implemented for neither units (no units at the source) or value as concept so this mapping might produce rows with no usable value and none of the measurements from this source will contain an unit.</em></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multilab lis&#228;tieto</td>
+<td>Measurement</td>
+<td>45826069</td>
+<td>71.27</td>
+<td>575</td>
+<td>5.74</td>
+</tr>
+</tbody>
+</table>
+<h3 id="multilab-mikrobitulos">Multilab mikrobitulos</h3>
+<p>Description TODO.</p>
+<p>Default target: <strong>TODO</strong></p>
+<p>Vocabulary mappings: <strong>TODO</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multilab mikrobitulos</td>
+<td>observation</td>
+<td>5637900</td>
+<td>99.97</td>
+<td>1106</td>
+<td>98.92</td>
+</tr>
+</tbody>
+</table>
+<h3 id="multilab-tulos">Multilab tulos</h3>
+<p>Description TODO.</p>
+<p>Default target: <strong>TODO</strong></p>
+<p>Vocabulary mappings: <strong>TODO</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multilab tulos</td>
+<td>Measurement</td>
+<td>582621855</td>
+<td>96.34</td>
+<td>6403</td>
+<td>16.37</td>
+</tr>
+<tr>
+<td>Multilab tulos</td>
+<td>observation</td>
+<td>39088</td>
+<td>100.00</td>
+<td>3</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Multilab tulos</td>
+<td>other Observation:Geography</td>
+<td>84954</td>
+<td>100.00</td>
+<td>1</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Multilab tulos</td>
+<td>other Observation:Meas Value</td>
+<td>7699</td>
+<td>100.00</td>
+<td>2</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Multilab tulos</td>
+<td>procedure_occurrence</td>
+<td>5184287</td>
+<td>100.00</td>
+<td>3</td>
+<td>100.00</td>
+</tr>
+</tbody>
+</table>
+<h3 id="opera-toimenptoimenpideiteet">Opera toimenptoimenpideiteet</h3>
+<p>Description TODO.</p>
+<p>Default target: <strong>TODO</strong></p>
+<p>Vocabulary mappings: <strong>TODO</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opera toimenptoimenpideiteet</td>
+<td>device_exposure</td>
+<td>4951</td>
+<td>100.00</td>
+<td>9</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Opera toimenptoimenpideiteet</td>
+<td>Measurement</td>
+<td>532</td>
+<td>100.00</td>
+<td>7</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Opera toimenptoimenpideiteet</td>
+<td>observation</td>
+<td>52777</td>
+<td>100.00</td>
+<td>45</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Opera toimenptoimenpideiteet</td>
+<td>other Observation:Meas Value</td>
+<td>234</td>
+<td>100.00</td>
+<td>6</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Opera toimenptoimenpideiteet</td>
+<td>other Observation:Route</td>
+<td>328</td>
+<td>100.00</td>
+<td>4</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Opera toimenptoimenpideiteet</td>
+<td>other Observation:Spec Anatomic Site</td>
+<td>750</td>
+<td>100.00</td>
+<td>1</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Opera toimenptoimenpideiteet</td>
+<td>procedure_occurrence</td>
+<td>5444086</td>
+<td>95.58</td>
+<td>5309</td>
+<td>36.54</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uranus-diagnoosi">Uranus diagnoosi</h3>
+<p>Description TODO.</p>
+<p>Default target: <strong>TODO</strong></p>
+<p>Vocabulary mappings: <strong>TODO</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uranus diagnoosi</td>
+<td>condition_occurrence</td>
+<td>54515489</td>
+<td>99.70</td>
+<td>12592</td>
+<td>92.59</td>
+</tr>
+<tr>
+<td>Uranus diagnoosi</td>
+<td>Measurement</td>
+<td>1058599</td>
+<td>100.00</td>
+<td>91</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus diagnoosi</td>
+<td>observation</td>
+<td>2342128</td>
+<td>100.00</td>
+<td>483</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus diagnoosi</td>
+<td>other Observation:Meas Value</td>
+<td>18919</td>
+<td>100.00</td>
+<td>2</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus diagnoosi</td>
+<td>procedure_occurrence</td>
+<td>2029791</td>
+<td>100.00</td>
+<td>153</td>
+<td>100.00</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uranus-hoitotaulukko">Uranus hoitotaulukko</h3>
+<p>Description TODO.</p>
+<p>Default target: <strong>TODO</strong></p>
+<p>Vocabulary mappings: <strong>TODO</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uranus hoitotaulukko</td>
+<td>Measurement</td>
+<td>88250380</td>
+<td>100.00</td>
+<td>112</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus hoitotaulukko</td>
+<td>observation</td>
+<td>11059900</td>
+<td>6.79</td>
+<td>415</td>
+<td>0.48</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uranus-laakitys">Uranus lääkitys</h3>
+<p>Description TODO.</p>
+<p>Default target: <strong>TODO</strong></p>
+<p>Vocabulary mappings: <strong>TODO</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uranus l&#228;&#228;kitys</td>
+<td>drug_exposure</td>
+<td>11072876</td>
+<td>93.97</td>
+<td>1518</td>
+<td>88.47</td>
+</tr>
+<tr>
+<td>Uranus l&#228;&#228;kitys</td>
+<td>drug_exposure</td>
+<td>22141686</td>
+<td>96.44</td>
+<td>1838</td>
+<td>88.19</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uranus-toimenpide">Uranus toimenpide</h3>
+<p>Description TODO.</p>
+<p>Default target: <strong>TODO</strong></p>
+<p>Vocabulary mappings: <strong>TODO</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uranus toimenpide</td>
+<td>device_exposure</td>
+<td>60844</td>
+<td>100.00</td>
+<td>11</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus toimenpide</td>
+<td>Measurement</td>
+<td>294411</td>
+<td>100.00</td>
+<td>21</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus toimenpide</td>
+<td>observation</td>
+<td>2404392</td>
+<td>100.00</td>
+<td>67</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus toimenpide</td>
+<td>other Observation:Meas Value</td>
+<td>6797</td>
+<td>100.00</td>
+<td>6</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus toimenpide</td>
+<td>other Observation:Route</td>
+<td>16257</td>
+<td>100.00</td>
+<td>5</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus toimenpide</td>
+<td>other Observation:Spec Anatomic Site</td>
+<td>28</td>
+<td>100.00</td>
+<td>1</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td>Uranus toimenpide</td>
+<td>procedure_occurrence</td>
+<td>21642758</td>
+<td>69.35</td>
+<td>6282</td>
+<td>33.97</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes-about-derived-tables-observation_period-eras-cdm_source">Notes about derived tables (observation_period, eras, cdm_source)</h2>
+<h3 id="observation_period">Observation_period</h3>
+<p>Observation period is constructed by taking first and last day of all event tables and visits.
+This is best we can do. Ideally we would like to know when all events that happen to person, will occur in HUS data but we don't for example know when persons move to other areas.</p>
+<p>Some events happen in the future, for example with drug_exposures. These will eventually be filtered out from the omop tables but currently, we use current date for those events when constructing observation_period.</p>
+<h3 id="drug_era">drug_era</h3>
+<p>Drug era is populated using a script from OHDSI: https://ohdsi.github.io/CommonDataModel/sqlScripts.html#drug_eras.</p>
+<p>Currently HUS drugs are mapped in ingredient level but it is possible that mappings will target more detailed levels.
+When those mappings have been implemented, it is worth knowing that drug_era is constructed at ingredient level -&gt; events at drug_exposure are not necessarily with the same drug concept_ids in the drug_exposure.</p>
+<h3 id="condition_era">condition_era</h3>
+<p>Condition era is populated using a script from OHDSI: https://ohdsi.github.io/CommonDataModel/sqlScripts.html#Condition_Eras.</p>
+<h3 id="cdm_source">cdm_source</h3>
+<p>todo</p>
+<h1 id="tecnical-notes">Tecnical notes</h1>
+<h2 id="definitions-in-ddl-structures">definitions in DDL structures</h2>
+<p>todo: distribution etc.</p>
+<h2 id="gathering-statistics">Gathering statistics</h2>
+<p>The database currently used for HUS main OMOP, <strong>Microsoft Synapse Analytics</strong>, requires that database statistics are up to date. Without those for example drug_era populating can fail with a tempdb related error.
+Because of this, a statement to gather statistics has been added to all event table load procedure.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

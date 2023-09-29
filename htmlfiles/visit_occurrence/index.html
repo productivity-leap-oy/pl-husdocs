@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/visit_occurrence/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Visit occurrence - HUS OMOP documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">HUS OMOP documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../Introduction_to_HUS_OMOP_ETL/" class="nav-link">Introduction</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../riah_combined/" class="nav-link">Details by OMOP table</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../riah_index/" class="nav-link">RiaH original</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#table-name-visit_occurrence" class="nav-link">Table name: visit_occurrence</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="table-name-visit_occurrence">Table name: visit_occurrence</h2>
+<h3 id="reading-from-uranus_kaynti">Reading from uranus_kaynti</h3>
+<p>Only take rows for which the person exists in PERSON_ID_FOR_ASIAKAS table.</p>
+<p><img alt="" src="../md_files/image3.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>potilasnumero</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>visit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 9202 Outpatient Visit.</td>
+</tr>
+<tr>
+<td>visit_start_date</td>
+<td>alkuhetki</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>visit_start_datetime</td>
+<td>alkuhetki</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>visit_end_date</td>
+<td>alkuhetki<br>loppuhetki</td>
+<td></td>
+<td>Use loppuhetki if available, else use alkuhetki. In neither is available, use NULL.</td>
+</tr>
+<tr>
+<td>visit_end_datetime</td>
+<td>alkuhetki<br>loppuhetki</td>
+<td></td>
+<td>Use loppuhetki if available, else use alkuhetki. If neither is available, use NULL.</td>
+</tr>
+<tr>
+<td>visit_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td>pot_eala_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find provider_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>care_site_id</td>
+<td>vo_toimipiste_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find care_site_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>visit_source_value</td>
+<td>kayntityyppi_selite</td>
+<td></td>
+<td>Use the connected field as is.</td>
+</tr>
+<tr>
+<td>visit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use 0.</td>
+</tr>
+<tr>
+<td>admitted_from_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>admitted_from_source_value</td>
+<td>mista_tuli_selite</td>
+<td></td>
+<td>Take at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>discharged_to_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>discharged_to_source_value</td>
+<td>jh_selite</td>
+<td></td>
+<td>Take at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>preceding_visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-uranus_osastohoito">Reading from uranus_osastohoito</h3>
+<p>Only take rows for which the person exists in PERSON_ID_FOR_ASIAKAS table.</p>
+<p><img alt="" src="../md_files/image4.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>potilasnumero</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>visit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 9201 Inpatient Visit.</td>
+</tr>
+<tr>
+<td>visit_start_date</td>
+<td>alkuhetki</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>visit_start_datetime</td>
+<td>alkuhetki</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>visit_end_date</td>
+<td>loppuhetki</td>
+<td></td>
+<td>Use the connected field if available, otherwise use the current date.</td>
+</tr>
+<tr>
+<td>visit_end_datetime</td>
+<td>loppuhetki</td>
+<td></td>
+<td>Use the connected field if available, otherwise use the current date.</td>
+</tr>
+<tr>
+<td>visit_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td>pot_eala_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find provider_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>care_site_id</td>
+<td>vo_toimipiste_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find care_site_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>visit_source_value</td>
+<td>tulotapa_selite</td>
+<td></td>
+<td>Use the connected field as is.</td>
+</tr>
+<tr>
+<td>visit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use 0.</td>
+</tr>
+<tr>
+<td>admitted_from_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>admitted_from_source_value</td>
+<td>mista_tuli_selite</td>
+<td></td>
+<td>Take at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>discharged_to_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>discharged_to_source_value</td>
+<td>jh_selite</td>
+<td></td>
+<td>Take at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>preceding_visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-tilannekanta_osastohoito">Reading from tilannekanta_osastohoito</h3>
+<p>Only take rows for which the person exists in PERSON_ID_FOR_ASIAKAS table.</p>
+<p><img alt="" src="../md_files/image5.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>henkilotunnus</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>visit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 9201 Inpatient Visit.</td>
+</tr>
+<tr>
+<td>visit_start_date</td>
+<td>alkuhetki</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>visit_start_datetime</td>
+<td>alkuhetki</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>visit_end_date</td>
+<td>loppuhetki</td>
+<td></td>
+<td>Use the connected field if available, otherwise use the current date.</td>
+</tr>
+<tr>
+<td>visit_end_datetime</td>
+<td>loppuhetki</td>
+<td></td>
+<td>Use the connected field if available, otherwise use the current date.</td>
+</tr>
+<tr>
+<td>visit_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td>pot_eala_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find provider_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>care_site_id</td>
+<td>vo_toimipiste_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find care_site_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>visit_source_value</td>
+<td>saapumistapa_selite</td>
+<td></td>
+<td>Use the connected field as is.</td>
+</tr>
+<tr>
+<td>visit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use 0.</td>
+</tr>
+<tr>
+<td>admitted_from_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>admitted_from_source_value</td>
+<td>mista_lah_tuli_selite</td>
+<td></td>
+<td>Take at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>discharged_to_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>discharged_to_source_value</td>
+<td>jatkohoito_selite</td>
+<td></td>
+<td>Take at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>preceding_visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-tilannekanta_kaynti">Reading from tilannekanta_kaynti</h3>
+<p>Only include rows for which person_id can be found.</p>
+<p><img alt="" src="../md_files/image6.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>henkilotunnus</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>visit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 9202 Outpatient Visit.</td>
+</tr>
+<tr>
+<td>visit_start_date</td>
+<td>alkuhetki</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>visit_start_datetime</td>
+<td>alkuhetki</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>visit_end_date</td>
+<td>loppuhetki</td>
+<td></td>
+<td>Use the connected field if available, otherwise use the current date.</td>
+</tr>
+<tr>
+<td>visit_end_datetime</td>
+<td>loppuhetki</td>
+<td></td>
+<td>Use the connected field if available, otherwise use the current date.</td>
+</tr>
+<tr>
+<td>visit_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td>pot_eala_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find provider_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>care_site_id</td>
+<td>vo_toimipiste_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find care_site_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>visit_source_value</td>
+<td>kayntityyppi_selite</td>
+<td></td>
+<td>Use the connected field as is.</td>
+</tr>
+<tr>
+<td>visit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use 0.</td>
+</tr>
+<tr>
+<td>admitted_from_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>admitted_from_source_value</td>
+<td>saapumistapa_selite</td>
+<td></td>
+<td>Take at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>discharged_to_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>discharged_to_source_value</td>
+<td>jatkohoito_selite</td>
+<td></td>
+<td>Take at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>preceding_visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

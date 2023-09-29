@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/measurement/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Measurement - HUS OMOP documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">HUS OMOP documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../Introduction_to_HUS_OMOP_ETL/" class="nav-link">Introduction</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../riah_combined/" class="nav-link">Details by OMOP table</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../riah_index/" class="nav-link">RiaH original</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#table-name-measurement" class="nav-link">Table name: measurement</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="table-name-measurement">Table name: measurement</h2>
+<h3 id="reading-from-opera_toimenpide">Reading from opera_toimenpide</h3>
+<p>Only include rows for which person_id can be found.</p>
+<p><img alt="" src="../md_files/image25.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>henkilotunnus</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Join to NOMESCO mapping table with the connected field to find target_concept_id if available, else use 0.</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>operaatio_tunnus</td>
+<td></td>
+<td>Join to OPERA_OPERAATIO with the connected field and use OPERA_OPERATIO.operaatio_pvm if available, else use OPERA_OPERATIO.potilas_saliin. If neither is available, the use NULL.</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td>operaatio_tunnus</td>
+<td></td>
+<td>Join to OPERA_OPERAATIO with the connected field and use OPERA_OPERATIO.operaatio_pvm if available, else use OPERA_OPERATIO.potilas_saliin. If neither is available, the use NULL.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_number</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td>operaatio_tunnus</td>
+<td></td>
+<td>Join to OPERA_OPERAATIO with the connected field, then join to the mapping table with OPERA_OPERATIO.pot_eala_koodi to find provider_id.</td>
+</tr>
+<tr>
+<td>visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Use at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Join to NOMESCO mapping table with the connected field to find source_concept_id if available, else use NULL.</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-opera_operaatio">Reading from opera_operaatio</h3>
+<p>Only include rows for which person_id can be found.</p>
+<p><img alt="" src="../md_files/image26.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>henkilotunnus</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>operaatio_tunnus</td>
+<td></td>
+<td>Join to OPERA_TOIMENPIDE with the connected field, then join to NOMESCO mapping table with OPERA_TOIMENPIDE.toimenpide_koodi to find target_concept_id. If this is not available, then use 0.</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>operaatio_pvm<br>potilas_saliin</td>
+<td></td>
+<td>Use operaatio_pvm if available, else use potilas_saliin. If neither is available, then use NULL.</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td>potilas_saliin<br>operaatio_pvm</td>
+<td></td>
+<td>Use operaatio_pvm if available, else use potilas_saliin. If neither is available, then use NULL.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_number</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td>pot_eala_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find provider_id.</td>
+</tr>
+<tr>
+<td>visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>operaatio_tunnus</td>
+<td></td>
+<td>Join to OPERA_TOIMENPIDE with the connected field, then use at most the first 50 characters from OPERA_TOIMENPIDE.toimenpide_koodi.</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td>operaatio_tunnus</td>
+<td></td>
+<td>Join to OPERA_TOIMENPIDE with the connected field, then join to NOMESCO mapping table with OPERA_TOIMENPIDE.toimenpide_koodi to find source_concept_id if available, else use NULL</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-tilannekanta_diagnoosi">Reading from tilannekanta_diagnoosi</h3>
+<p>Only include rows for which person_id can be found.</p>
+<p><img alt="" src="../md_files/image27.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>henkilotunnus</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>diagnoosi_koodi</td>
+<td></td>
+<td>Join to ICD10 mapping table with the connected field without a possible "combination character" ('*','&amp;','#','+') at the end to find target_concept_id. If this is not available, then use 0.</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>ilmoitettu_alkuhetki<br>kontakti_alkuhetki<br>paivityshetki</td>
+<td></td>
+<td>Use the first available (in this order) from kontakti_alkuhetki, ilmoitettu_alkuhetki, paivityshetki. If none of these is avalable, then use NULL.</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td>ilmoitettu_alkuhetki<br>kontakti_alkuhetki<br>paivityshetki</td>
+<td></td>
+<td>Use the first available (in this order) from kontakti_alkuhetki, ilmoitettu_alkuhetki, paivityshetki. If none of these is avalable, then use NULL.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_number</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td>diagnoosi_koodi</td>
+<td></td>
+<td>Join to ICD10 mapping table with the connected field without a possible "combination character" ('*','&amp;','#','+') at the end to find source_concept_id, and map this by a valid 'Maps to value' relationship to find value_as_concept_id. If this is not available, then use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_occurrence_id</td>
+<td>palvelutuote_numero</td>
+<td></td>
+<td>Automatically generated in VISIT_INTERMEDIATE. Join to this table using the connected field. If not available, then use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>diagnoosi_koodi</td>
+<td></td>
+<td>Use at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td>paadiagnoosi</td>
+<td></td>
+<td>Join to ICD10 mapping table with the connected field without a possible "combination character" ('*','&amp;','#','+') at the end to find source_concept_id. If this is not available, then use 0.</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td></td>
+<td></td>
+<td>uranus_diagnoosi,   tilannekanta_diagnoosi,  uranus_toimenpide,  tilannekanta_toimenpide,  opera_toimenpide,  opera_operaatio,  multilab_lisatiedot:  Use NULL    multilab_tulos, cressida_hoitotaulukkoods:  Use the connected field as is.</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td>diagnoosi_koodi</td>
+<td></td>
+<td>tilannekanta_diagnoosi (HUOM JANNE 13.9.2023: ETL-VERSIOSSA 17.8.2023 TÄTÄ EI VIELÄ OLLUT, TARKASTETTAVA),</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-tilannekanta_toimenpide">Reading from tilannekanta_toimenpide</h3>
+<p>Only include rows for which person_id can be found.</p>
+<p><img alt="" src="../md_files/image28.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>henkilotunnus</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Join to NOMESCO mapping table with the connected field to find target_concept_id if available, else use 0.</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>toimenpide_hetki</td>
+<td></td>
+<td>Use the connected field as is.    uranus_toimenpide:  Use toimenpide_hetki if available, else use luontihetki. If neither is available, use NULL.</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td>toimenpide_hetki</td>
+<td></td>
+<td>Use the connected field as is.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_number</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td>pot_eala_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find provider_id.</td>
+</tr>
+<tr>
+<td>visit_occurrence_id</td>
+<td>palvelutuote_numero</td>
+<td></td>
+<td>Automatically generated in VISIT_INTERMEDIATE. Join to this table using the connected field. If not available, then use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Use at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Join to NOMESCO mapping table with the connected field to find source_concept_id if available, else use NULL.</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-uranus_diagnoosi">Reading from uranus_diagnoosi</h3>
+<p>Only include rows for which person_id can be found.</p>
+<p><img alt="" src="../md_files/image29.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>potilasnumero</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Join to ICD10 mapping table with the connected field without a possible "combination character" ('*','&amp;','#','+') at the end to find target_concept_id. If this is not available, then use 0.    tilannekanta_toimenpide</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>kontakti_alkuhetki<br>ilmoitettu_alkuhetki<br>paivityshetki</td>
+<td></td>
+<td>Use the first available (in this order) from kontakti_alkuhetki, ilmoitettu_alkuhetki, paivityshetki. If none of these is avalable, then use NULL.</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td>ilmoitettu_alkuhetki<br>paivityshetki<br>kontakti_alkuhetki</td>
+<td></td>
+<td>Use the first available (in this order) from kontakti_alkuhetki, ilmoitettu_alkuhetki, paivityshetki. If none of these is avalable, then use NULL.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_number</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td>diagnoosi_koodi</td>
+<td></td>
+<td>Join to ICD10 mapping table with the connected field without a possible "combination character" ('*','&amp;','#','+') at the end to find source_concept_id, and map this by a valid 'Maps to value' relationship to find value_as_concept_id. If this is not available, then use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_occurrence_id</td>
+<td>palvelu_numero</td>
+<td></td>
+<td>Automatically generated in VISIT_INTERMEDIATE. Join to this table using the connected field. If not available, then use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>diagnoosi_koodi</td>
+<td></td>
+<td>Use at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td>diagnoosi_koodi</td>
+<td></td>
+<td>Join to ICD10 mapping table with the connected field without a possible "combination character" ('*','&amp;','#','+') at the end to find source_concept_id. If this is not available, then use 0.</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td>diagnoosi_koodi</td>
+<td></td>
+<td>Use at most the first 50 characters from the connected field if available, else use NULL.</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-uranus_toimenpide">Reading from uranus_toimenpide</h3>
+<p>Only include rows for which person_id can be found and toteuttanut_jarjestelma is not 'OPERA'.</p>
+<p><img alt="" src="../md_files/image30.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>potilasnumero</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Join to NOMESCO mapping table with the connected field to find target_concept_id if available, else use 0.</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>toimenpide_hetki<br>luontihetki</td>
+<td></td>
+<td>Use toimenpide_hetki if available, else use luontihetki. If neither is available, use NULL.    cresside_hoitotaulukkoods:  Use the connected field.</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td>toimenpide_hetki<br>luontihetki</td>
+<td></td>
+<td>Use toimenpide_hetki if available, else use luontihetki. If neither is available, use NULL.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_number</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td>pot_eala_koodi</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find provider_id.</td>
+</tr>
+<tr>
+<td>visit_occurrence_id</td>
+<td>kontakti_numero</td>
+<td></td>
+<td>Automatically generated in VISIT_INTERMEDIATE. Join to this table using the connected field. If not available, then use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Use at most the first 50 characters from the connected field.</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td>toimenpide_koodi</td>
+<td></td>
+<td>Join to NOMESCO mapping table with the connected field to find source_concept_id if available, else use NULL.</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-multilab_tulos">Reading from multilab_tulos</h3>
+<p>Only include rows for which person_id can be found.
+Exclude rows for which
+mikrobitulos is not NULL,
+tulos = 'POISTETTU',
+tulos = 'PYYDETTY',
+tulos contains a substring 'ei tehd',
+tulos contains a substring 'ei onnist',
+naytteenottoaika is available, but is not after 1700-01-01 00:00:00.0000000, or
+lähetysaika is available, but is not after 1700-01-01 00:00:00.0000000.</p>
+<p><img alt="" src="../md_files/image31.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>henkilotunnus</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>tutkimus_kuntaliiton_numero</td>
+<td></td>
+<td>Join to HUSLAB mapping table with the connected field to find target_concept_id if available, else use 0.</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>naytteenottoaika<br>tekoaika<br>lahetysaika<br>pyyntoaika</td>
+<td></td>
+<td>Use the first one available (in this order) of the following: naytteenottoaika, tekoaika, lahetysaika, pyyntoaika. If none of these is available, then use the current date</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td>naytteenottoaika<br>tekoaika<br>lahetysaika<br>pyyntoaika</td>
+<td></td>
+<td>Use the first one available (in this order) of the following: naytteenottoaika, tekoaika, lahetysaika, pyyntoaika. If none of these is available, then use the current date and time.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td>tulos</td>
+<td></td>
+<td>If the connected field begins with "&lt;", "ali", "alle", "&gt;", or "yli" and the rest of the field can be converted into a numeric value, then use 4172704 ("&gt;"). If the connected field begins with "&gt;" or "yli", otherwise use 4171756 ("&lt;"). If this interpretation cannot be done, then use NULL.</td>
+</tr>
+<tr>
+<td>value_as_number</td>
+<td>tulos</td>
+<td></td>
+<td>Parse a numeric value from the connected field. If this cannot be done, then use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td>tulos</td>
+<td></td>
+<td>Join to the mapping table with the connected field using 'Multilab_tulos' vocabulary to find target_concept_id if available, else use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td>tulos</td>
+<td></td>
+<td>Join to the mapping table with the connected field using 'HUS_UNIT' vocabulary to find target_concept_id if available, else use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td>viitearvot</td>
+<td></td>
+<td>Parse from the connected field (from the substring preseding '/' if this character exists). Use the number following '&gt;' or the number preceding '-'.</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td>viitearvot</td>
+<td></td>
+<td>Parse from the connected field (from the substring preseding '/' if this character exists). Use the number following '&lt;' or the number following '-'.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>tutkimus_kuntaliiton_numero</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td>yksikko</td>
+<td></td>
+<td>Use the connected field as is.</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td>tulos</td>
+<td></td>
+<td>Use the connected field if available, otherwise use an empty string.</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-load_cressida_hoitotaulukkoods">Reading from load_cressida_hoitotaulukkoods</h3>
+<p>Only include rows for which person_id can be found.</p>
+<p><img alt="" src="../md_files/image32.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>potilasnumero</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>suure_koodi<br>suure_koodiston_aihe</td>
+<td></td>
+<td>Join to the mapping table primarily using the connected fields to find target_concept_id. However, if suure_koodi = 'BMI' and suure_koodiston_aihe is not available, then join using LOINC vocabulary with the code '39156-5'. If a match is not found, then use 0.</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>tapahtuma_pvm</td>
+<td></td>
+<td>Use the connected field.</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td></td>
+<td></td>
+<td>Convert the connected field to float if possible, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td>suure_mittayksikko</td>
+<td></td>
+<td>Join to the mapping table with the connected field and with 'HUS_UNIT' to find target_concept_id if available, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>suure_koodi<br>suure_koodiston_aihe</td>
+<td></td>
+<td>Concatenate suure_koodiston_aihe, '/', and suure_koodi. If suure_koodiston_aihe is NULL, then use 'LOINC' in place of suure_koodiston_aihe.</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td>suure_koodi<br>suure_koodiston_aihe</td>
+<td></td>
+<td>Join to the mapping table primarily using the connected fields to find source_concept_id. However, if suure_koodi = 'BMI' and suure_koodiston_aihe is not available, then join using LOINC with the code '39156-5'. If a match is not found, then use NULL.</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td>suure_mittayksikko</td>
+<td></td>
+<td>Use the connected field as is.</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td>havaintoarvo</td>
+<td></td>
+<td>Use the connected field as is.</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-from-multilab_lisatiedot">Reading from multilab_lisatiedot</h3>
+<p>Only include rows for which person_id can be found and tulos is not 'POISTETTU' or does not contain 'ei tehd' or 'ei onnist' (case ignored).</p>
+<p><img alt="" src="../md_files/image33.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Destination Field</th>
+<th>Source field</th>
+<th>Logic</th>
+<th>Comment field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>measurement_id</td>
+<td></td>
+<td></td>
+<td>Generated automatically.</td>
+</tr>
+<tr>
+<td>person_id</td>
+<td>henkilotunnus</td>
+<td></td>
+<td>Join to the mapping table with the connected field to find person_id.</td>
+</tr>
+<tr>
+<td>measurement_concept_id</td>
+<td>lisatiedon_nimi</td>
+<td></td>
+<td>multilab_lisatiedot: Join to the mapping table with the connected field and with source_vocabulary_id = 'Lisatiedot' to find target_concept_id if available, otherwise use 0.</td>
+</tr>
+<tr>
+<td>measurement_date</td>
+<td>naytteenottoaika<br>tekoaika</td>
+<td></td>
+<td>multilab_lisatiedot: Use naytteenottoaika if available, else use tekoaika. If neither is available, then use NULL.</td>
+</tr>
+<tr>
+<td>measurement_datetime</td>
+<td>naytteenottoaika<br>tekoaika</td>
+<td></td>
+<td>multilab_lisatiedot:  Use naytteenottoaika if available, else use tekoaika. If neither is available, then use NULL.</td>
+</tr>
+<tr>
+<td>measurement_time</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_type_concept_id</td>
+<td></td>
+<td></td>
+<td>Use standard: 32817 EHR.</td>
+</tr>
+<tr>
+<td>operator_concept_id</td>
+<td>lisatiedon_arvo</td>
+<td></td>
+<td>If the connected field begins with "&lt;", "ali", "alle", "&gt;", or "yli" and the rest of the field can be converted into a numeric value, then use 4172704 ("&gt;"). If the connected field begins with "&gt;" or "yli", otherwise use 4171756 ("&lt;"). If this interpretation cannot be done, then use NULL.</td>
+</tr>
+<tr>
+<td>value_as_number</td>
+<td>lisatiedon_arvo<br>lisatiedon_nimi</td>
+<td></td>
+<td>Try to convert lisatiedon arvo into a numeric value, possibly preceded by an operator "&lt;", "ali", "alle", "&gt;", or "yli", and join to the mapping table with lisatiedon_nimi and with source_vocabulary_id =  'Lisatiedot'. In case of success, use the converted number, otherwise use NULL.</td>
+</tr>
+<tr>
+<td>value_as_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>unit_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_low</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>range_high</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>provider_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_occurrence_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>visit_detail_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>measurement_source_value</td>
+<td>lisatiedon_nimi</td>
+<td></td>
+<td>Use the first 50 dharacters from the connected field if available, otherwise use ' ' (a string with a single space).</td>
+</tr>
+<tr>
+<td>measurement_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>unit_source_value</td>
+<td></td>
+<td></td>
+<td>Use NULL</td>
+</tr>
+<tr>
+<td>unit_source_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>value_source_value</td>
+<td>tulos<br>lisatiedon_arvo</td>
+<td></td>
+<td>Take the first 50 characters from the string obtained by joining tulos, '</td>
+</tr>
+<tr>
+<td>measurement_event_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+<tr>
+<td>meas_event_field_concept_id</td>
+<td></td>
+<td></td>
+<td>Use NULL.</td>
+</tr>
+</tbody>
+</table></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
