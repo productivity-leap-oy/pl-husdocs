@@ -85,7 +85,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#notes-about-customer-data" class="nav-link">Notes about customer data</a>
+            <li class="nav-item" data-level="2"><a href="#notes-about-customer-and-customer-history-data" class="nav-link">Notes about customer and customer history data</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -98,19 +98,6 @@
               </ul>
             </li>
             <li class="nav-item" data-level="2"><a href="#notes-about-derived-tables-observation_period-eras-cdm_source" class="nav-link">Notes about derived tables (observation_period, eras, cdm_source)</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-              </ul>
-            </li>
-            
-            <li class="nav-item" data-level="1"><a href="#tecnical-notes" class="nav-link">Tecnical notes</a>
-              <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#definitions-in-ddl-structures" class="nav-link">definitions in DDL structures</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#gathering-statistics" class="nav-link">Gathering statistics</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -262,14 +249,16 @@ side by side Ctrl+K V
 <p>The following tables show where data from each source structure goes. Mapped_rows_pct describes the coverage of the mapping. Each source has a default target based on the nature of the source == diagnosis information is targeted to condition_occurrence if we can’t map the code to a standard concept. Unmapped rows (and codes) lower the mapping coverage percentage of the target that is the default of each source.</p>
 <p>If a standard concept is found, its domain dictates the target table. Because of this, the following table contains many rows here mapped_rows_pct is 100%. This is not a sign of exceptionally complete vocabulary mapping but just tells us that for example, all rows destined to condition occurrence from Apotti’s procedure source (Apotti/Tilannekanta toimenpide) were loaded as conditions.</p>
 <p>Because targets are dictated by the domains of the vocabulary mapping target concepts, targets can change over time without the actual ETL changing.</p>
-<h2 id="notes-about-customer-data">Notes about customer data</h2>
-<p>TODO</p>
-<h3 id="customer-history">Customer history</h3>
-<p>TODO</p>
+<h2 id="notes-about-customer-and-customer-history-data">Notes about customer and customer history data</h2>
+<p>HUS data lake provider datasets for both current customer data and history data for various customer indetifiers (patient number, social security numbers).</p>
+<p>Because the same customer can exists in the sources with several different identifiers (although most datalake views provide the data with the latest indetifiers), OMOP ETL maintaints a persistent mapping table that is used to give a same OMOP person_id for each indetifier belonging to the same customer. This way events are mapped to the same person in omop even if the events use different social security numbers for the same person.</p>
 <h3 id="excluded-patients">Excluded patients</h3>
-<p>TODO</p>
+<p>There are cases when the use of data related to a certain person is forbidden. Most common case is person not being a real person but a test person.
+Datalake provides an exclusion list for these cases. This list is used as filter when populating the OMOP tables.</p>
 <h2 id="notes-about-visit-data">Notes about visit data</h2>
-<p>TODO hoitojaksot ja käynnit, Uranus ja Apotti, päällekkäisyydet</p>
+<p>Inpatient and outpatient data is loaded both from Uranus and Apotti sources.
+Then the use of Apotti started (2019 onwards), Uranus and Apotti were used side by side at some parts of HUS organization.
+This can cause duplicates in the data. Because number of these cases is small and on the other hand, choosing reliably between the available events is hard, no filtering has been implemented.</p>
 <h2 id="notes-about-individual-medical-event-sources">Notes about individual medical event sources</h2>
 <p>This section describes for each source 
 - nature of the source
@@ -278,17 +267,36 @@ side by side Ctrl+K V
 - to what OMOP tables the rows go according to domains of the target concepts in the current (as of 2023-9-14) mappings</p>
 <h3 id="apotticlarity-laakitys">Apotti/Clarity lääkitys</h3>
 <p>Medication data from Apotti. Contains both prescriptions and drugs ordered(?) during the hospital stay.</p>
-<p>Default target: drug_exposure</p>
-<p>Vocabulary mapping: ATC and HUS-kemo-generic</p>
+<p>Default target: <strong>drug_exposure</strong></p>
+<p>Vocabulary mapping: <strong>ATC</strong> and <strong>HUS-kemo-generic</strong></p>
 <p><em>It is worth noting that OMOP’s ATC vocabulary comes a little bit behind compared to the ATC classification that is used. Because of this, some really new codes can be left unmapped by ATC. We use mapping by the  generic name (“HUS-kemo-generic”) as a failsafe in these situations.</em></p>
-<p>Some ATC codes that are used and that are not actual drugs, for example, hand lotions, are missing from the ATC vocabulary and mappings related to that.
-|Source|domain_as_table|n_rows|mapped_rows_pct|n_source_codes|mapped_codes_pct|
-|---|---|---|---|---|---|
-|Apotti/Clarity l&#228;&#228;kitys|drug_exposure|28467716|87.74|1792|91.24|</p>
+<p>Some ATC codes that are used and that are not actual drugs, for example, hand lotions, are missing from the ATC vocabulary and mappings related to that.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>domain_as_table</th>
+<th>n_rows</th>
+<th>mapped_rows_pct</th>
+<th>n_source_codes</th>
+<th>mapped_codes_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apotti/Clarity l&#228;&#228;kitys</td>
+<td>drug_exposure</td>
+<td>28467716</td>
+<td>87.74</td>
+<td>1792</td>
+<td>91.24</td>
+</tr>
+</tbody>
+</table>
 <h3 id="apottitilannekanta-diagnoosi">Apotti/Tilannekanta diagnoosi</h3>
 <p>Diagnosis data from Apotti. </p>
-<p>Default target: condition_occurrence</p>
-<p>Vocabulary mapping: ICD10 and ICD10fi</p>
+<p>Default target: <strong>condition_occurrence</strong></p>
+<p>Vocabulary mapping: <strong>ICD10</strong> and <strong>ICD10fi</strong></p>
 <p>The mapping is based on a combination of FinOMOP developed ICD10fi and international ICD10 vocabulary mappings. ICD10fi contains the national codes that are used only in Finland.</p>
 <table>
 <thead>
@@ -345,7 +353,8 @@ side by side Ctrl+K V
 </tbody>
 </table>
 <h3 id="apottitilannekanta-toimenpide">Apotti/Tilannekanta toimenpide</h3>
-<p>Procedure data from Apotti. </p>
+<p>Procedure data from Apotti. 
+It is worth noting that vocabulary mapping uses target concepts from many different domains. So while the original code can be thinked as a code describing an operation that has been done, the actual meaning of the code can be for example a condition that applies to the patient.</p>
 <p>Default target:  <strong>procedure occurrence</strong></p>
 <p>Vocabulary mapping: <strong>NCSPfi</strong></p>
 <p>The NCSPfi mapping is developed by the FinOMOP community. </p>
@@ -470,7 +479,7 @@ side by side Ctrl+K V
 <p>The events are primarily mapped to standard concepts using ATC, but when that fails, generic name mapping is used. There are two reasons for this:
 - Some drugs are too new to have their ATC codes in the OMOP vocabulary
 - Research drugs are mapped only using their generic name</p>
-<p><strong>TODO: Tarvitaan tarkempi kuvaus tutkimuslääkkeiden käsittelystä.</strong></p>
+<p>The Marela data contains, in addition to regular drugs, information about <strong>clinical research drugs</strong> (tutkimuslääkkeet) and <strong>chemotherapy drugs</strong> (solunsalpaajat). These use a special handling where multiple rows of drug_exposure data is produced from a single source row based on information stored in product name (tuotenimi) -column.</p>
 <table>
 <thead>
 <tr>
@@ -523,9 +532,10 @@ side by side Ctrl+K V
 </tbody>
 </table>
 <h3 id="multilab-mikrobitulos">Multilab mikrobitulos</h3>
-<p>Description TODO.</p>
-<p>Default target: <strong>TODO</strong></p>
-<p>Vocabulary mappings: <strong>TODO</strong></p>
+<p>Microbe finding information from Multilab. </p>
+<p>Default target: <strong>observation</strong></p>
+<p>Vocabulary mappings: <strong>HUS_microbes</strong></p>
+<p>Currently the connection between the lab test that that is the "cause" of microbe findings and the actual findings is not stored in the CDM. There are plans to add this utilizing the new columns in the CDM 5.4 version. </p>
 <table>
 <thead>
 <tr>
@@ -549,9 +559,10 @@ side by side Ctrl+K V
 </tbody>
 </table>
 <h3 id="multilab-tulos">Multilab tulos</h3>
-<p>Description TODO.</p>
-<p>Default target: <strong>TODO</strong></p>
-<p>Vocabulary mappings: <strong>TODO</strong></p>
+<p>Main lab test information from Multilab.</p>
+<p>Default target: <strong>measurement</strong></p>
+<p>Vocabulary mappings: <strong>HUSLAB</strong></p>
+<p>For many tests, the actual result will be in either "Multilab lisätieto" or "Multilab mikrobitulos" and this source will only contain information that test has been done. Linking of events enabled by CDM 5.4 version have not yet been implemented.</p>
 <table>
 <thead>
 <tr>
@@ -607,9 +618,9 @@ side by side Ctrl+K V
 </tbody>
 </table>
 <h3 id="opera-toimenptoimenpideiteet">Opera toimenptoimenpideiteet</h3>
-<p>Description TODO.</p>
-<p>Default target: <strong>TODO</strong></p>
-<p>Vocabulary mappings: <strong>TODO</strong></p>
+<p>Procedure information from Opera system. This combines source data tables opera_operaatio  and opera_toimenpide (header and detail information). </p>
+<p>Default target: <strong>procedure_occurrence</strong></p>
+<p>Vocabulary mappings: <strong>NCSPfi</strong> (and currently also soon to be deprecated NCSP-FIN).</p>
 <table>
 <thead>
 <tr>
@@ -681,9 +692,9 @@ side by side Ctrl+K V
 </tbody>
 </table>
 <h3 id="uranus-diagnoosi">Uranus diagnoosi</h3>
-<p>Description TODO.</p>
-<p>Default target: <strong>TODO</strong></p>
-<p>Vocabulary mappings: <strong>TODO</strong></p>
+<p>Diagnosis information from Uranus source system. Uranus has been replaced by Apotti starting from about 2020. Both systems have been used side-by-side for a short time. </p>
+<p>Default target: <strong>condition_occurrence</strong></p>
+<p>Vocabulary mappings: <strong>ICD10</strong> (the international Who coding) <strong>ICD10fi</strong> (Finnish national additions).</p>
 <table>
 <thead>
 <tr>
@@ -739,9 +750,9 @@ side by side Ctrl+K V
 </tbody>
 </table>
 <h3 id="uranus-hoitotaulukko">Uranus hoitotaulukko</h3>
-<p>Description TODO.</p>
-<p>Default target: <strong>TODO</strong></p>
-<p>Vocabulary mappings: <strong>TODO</strong></p>
+<p>Various notes related to patiens care from the Uranus (Cressida) system. These include measurements such as BMI and various others. There are several vocabularies in use. Vocabulary mappings have been constructed for only a small fraction of these.</p>
+<p>Default target: <strong>observation</strong></p>
+<p>Vocabulary mappings: <strong>LOINC, CTBRE, CTCOM, CTEYE, CTCIR, CTGEN, CTHYD</strong></p>
 <table>
 <thead>
 <tr>
@@ -773,9 +784,9 @@ side by side Ctrl+K V
 </tbody>
 </table>
 <h3 id="uranus-laakitys">Uranus lääkitys</h3>
-<p>Description TODO.</p>
-<p>Default target: <strong>TODO</strong></p>
-<p>Vocabulary mappings: <strong>TODO</strong></p>
+<p>Medication data from Uranus. This contains data from both prescriptions and drugs ordered during hospital stay.</p>
+<p>Default target: <strong>drug_exposure</strong></p>
+<p>Vocabulary mappings: <strong>ATC</strong>. Drug route uses mapping <strong>MedsRoute</strong>.</p>
 <table>
 <thead>
 <tr>
@@ -807,9 +818,9 @@ side by side Ctrl+K V
 </tbody>
 </table>
 <h3 id="uranus-toimenpide">Uranus toimenpide</h3>
-<p>Description TODO.</p>
-<p>Default target: <strong>TODO</strong></p>
-<p>Vocabulary mappings: <strong>TODO</strong></p>
+<p>Procedure/operation data from Uranus. This source contains also data originating from <strong>Opera</strong>. Because we have more complete and separate source for Opera-data, rows originating from Opera are filtered out. </p>
+<p>Default target: <strong>procedure_occurrence</strong></p>
+<p>Vocabulary mappings: <strong>NCSPfi</strong></p>
 <table>
 <thead>
 <tr>
@@ -882,7 +893,7 @@ side by side Ctrl+K V
 </table>
 <h2 id="notes-about-derived-tables-observation_period-eras-cdm_source">Notes about derived tables (observation_period, eras, cdm_source)</h2>
 <h3 id="observation_period">Observation_period</h3>
-<p>Observation period is constructed by taking first and last day of all event tables and visits.
+<p>Observation period is constructed by taking by person first and last day of all event tables and visits.
 This is best we can do. Ideally we would like to know when all events that happen to person, will occur in HUS data but we don't for example know when persons move to other areas.</p>
 <p>Some events happen in the future, for example with drug_exposures. These will eventually be filtered out from the omop tables but currently, we use current date for those events when constructing observation_period.</p>
 <h3 id="drug_era">drug_era</h3>
@@ -892,13 +903,8 @@ When those mappings have been implemented, it is worth knowing that drug_era is 
 <h3 id="condition_era">condition_era</h3>
 <p>Condition era is populated using a script from OHDSI: https://ohdsi.github.io/CommonDataModel/sqlScripts.html#Condition_Eras.</p>
 <h3 id="cdm_source">cdm_source</h3>
-<p>todo</p>
-<h1 id="tecnical-notes">Tecnical notes</h1>
-<h2 id="definitions-in-ddl-structures">definitions in DDL structures</h2>
-<p>todo: distribution etc.</p>
-<h2 id="gathering-statistics">Gathering statistics</h2>
-<p>The database currently used for HUS main OMOP, <strong>Microsoft Synapse Analytics</strong>, requires that database statistics are up to date. Without those for example drug_era populating can fail with a tempdb related error.
-Because of this, a statement to gather statistics has been added to all event table load procedure.</p></div>
+<p>The CDM_SOURCE is populated using current date for both SOURCE_RELEASE_DATE and CDM_RELEASE_DATE as source data has just been read from data lake and CDM data is immediately usable after the etl.
+Other values are hard coded.</p></div>
             </div>
         </div>
 
