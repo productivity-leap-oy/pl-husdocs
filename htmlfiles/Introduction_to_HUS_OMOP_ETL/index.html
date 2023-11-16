@@ -30,6 +30,9 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../HUS_OMOP_Documentation/" class="nav-link">HUS OMOP Documentation (NEW)</a>
+                            </li>
                             <li class="navitem active">
                                 <a href="./" class="nav-link">Introduction</a>
                             </li>
@@ -48,7 +51,7 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" class="nav-link disabled">
+                                <a rel="prev" href="../HUS_OMOP_Documentation/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
@@ -111,6 +114,9 @@
 <p>Remove when ready: https://code.visualstudio.com/docs/languages/markdown
 side by side Ctrl+K V
  switch between views, press Ctrl+Shift+V</p>
+<p><strong>Important! This documentation is replaced with "all in one" version 
+<a href="../HUS_OMOP_Documentation/">HUS OMOP Documentation</a>
+ that is easier to translate to pdf.</strong></p>
 <h1 id="overview">Overview</h1>
 <p>HUS OMOP uses data lake structures as sources. All ETL logic is implemented as stored procedures in the Synapse Analytics database. </p>
 <p>Sources are accessed via external tables (=a structure that looks like a table in the database but uses a data lake object as storage).</p>

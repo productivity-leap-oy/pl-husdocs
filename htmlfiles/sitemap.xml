@@ -1,68 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
+         <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/HUS_OMOP_Documentation/</loc>
+         <lastmod>2023-11-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/Introduction_to_HUS_OMOP_ETL/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/condition_occurrence/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/death/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/device_exposure/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/drug_exposure/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/measurement/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/observation/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/person/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/procedure_occurrence/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/riah_combined/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/riah_index/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/source_appendix/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://productivity-leap-oy.github.io/pl-husdocs/mdfiles/visit_occurrence/</loc>
-         <lastmod>2023-10-03</lastmod>
+         <lastmod>2023-11-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
